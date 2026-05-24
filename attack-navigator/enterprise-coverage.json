@@ -1,0 +1,255 @@
+{
+  "versions": {
+    "attack": "15",
+    "navigator": "5.1.0",
+    "layer": "4.5"
+  },
+  "gradient": {
+    "colors": [
+      "#c62828ff",
+      "#f9a825ff",
+      "#2e7d32ff"
+    ],
+    "minValue": 0,
+    "maxValue": 100
+  },
+  "legendItems": [
+    {
+      "label": "Detected by a repo rule",
+      "color": "#2e7d32"
+    },
+    {
+      "label": "Partial / hunt-level heuristic",
+      "color": "#f9a825"
+    },
+    {
+      "label": "Documented TTP - detection gap",
+      "color": "#c62828"
+    }
+  ],
+  "showTacticRowBackground": true,
+  "tacticRowBackground": "#205b8f",
+  "selectTechniquesAcrossTactics": true,
+  "selectSubtechniquesWithParent": false,
+  "sorting": 0,
+  "hideDisabled": false,
+  "layout": {
+    "layout": "side",
+    "showName": true,
+    "showID": true,
+    "showAggregateScores": true,
+    "aggregateFunction": "average",
+    "countUnscored": false
+  },
+  "metadata": [
+    {
+      "name": "repo",
+      "value": "bfsi-banking-trojan-detections"
+    },
+    {
+      "name": "source",
+      "value": "CYBERXTRON advisories; IOCs enriched via Google Threat Intelligence"
+    },
+    {
+      "name": "generated",
+      "value": "2026-05-25"
+    }
+  ],
+  "name": "BFSI Banking Trojans - Enterprise Coverage",
+  "domain": "enterprise-attack",
+  "description": "Detection coverage for Banana RAT (SHADOW-WATER-063) and TCLBANKER (Windows) plus cross-cutting delivery/execution techniques. Green=detected by a repo rule, amber=hunt-level heuristic, red=documented TTP not yet covered. TrickMo's mobile TTPs are in the companion mobile-attack layer.",
+  "techniques": [
+    {
+      "techniqueID": "T1059.001",
+      "color": "#2e7d32",
+      "score": 100,
+      "comment": "Covered: banana_rat_powershell_c2 (Banana RAT)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1105",
+      "color": "#2e7d32",
+      "score": 100,
+      "comment": "Covered: banana_rat_powershell_c2 (Banana RAT staging)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1071.001",
+      "color": "#2e7d32",
+      "score": 100,
+      "comment": "Covered: fin_c2_domains_dns (Banana RAT, TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1571",
+      "color": "#2e7d32",
+      "score": 100,
+      "comment": "Covered: banana_rat_c2_ip (Banana RAT direct C2 IPs)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1204.002",
+      "color": "#2e7d32",
+      "score": 100,
+      "comment": "Covered: fin_known_hashes (all three families)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1574.002",
+      "color": "#2e7d32",
+      "score": 100,
+      "comment": "Covered: tclbanker_dll_sideload (TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1036.001",
+      "color": "#2e7d32",
+      "score": 100,
+      "comment": "Covered: tclbanker_dll_sideload (forged Logitech signature)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1566",
+      "color": "#f9a825",
+      "score": 50,
+      "comment": "Partial: trickmo_apk_sideload proxy heuristic (hunt-level)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1027",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Obfuscated Files (Banana RAT, TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1053.005",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Scheduled Task (Banana RAT, TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1547",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Boot/Logon Autostart (Banana RAT)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1113",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Screen Capture (Banana RAT, TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1056.001",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Keylogging (Banana RAT)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1115",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Clipboard Data (Banana RAT, TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1041",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Exfiltration Over C2 (Banana RAT, TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1021",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Remote Services (Banana RAT)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1219",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Remote Access Software (Banana RAT)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1055",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Process Injection (Banana RAT, TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1140",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Deobfuscate/Decode (Banana RAT, TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1555",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Credentials from Password Stores (Banana RAT)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1497",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Virtualization/Sandbox Evasion (TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1622",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Debugger Evasion (TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1082",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "System Information Discovery (TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1016",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "System Network Config Discovery (TCLBANKER)",
+      "enabled": true,
+      "showSubtechniques": false
+    }
+  ]
+}

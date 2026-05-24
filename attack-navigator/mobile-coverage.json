@@ -1,0 +1,175 @@
+{
+  "versions": {
+    "attack": "15",
+    "navigator": "5.1.0",
+    "layer": "4.5"
+  },
+  "gradient": {
+    "colors": [
+      "#c62828ff",
+      "#f9a825ff",
+      "#2e7d32ff"
+    ],
+    "minValue": 0,
+    "maxValue": 100
+  },
+  "legendItems": [
+    {
+      "label": "Detected by a repo rule",
+      "color": "#2e7d32"
+    },
+    {
+      "label": "Partial / hunt-level heuristic",
+      "color": "#f9a825"
+    },
+    {
+      "label": "Documented TTP - detection gap",
+      "color": "#c62828"
+    }
+  ],
+  "showTacticRowBackground": true,
+  "tacticRowBackground": "#205b8f",
+  "selectTechniquesAcrossTactics": true,
+  "selectSubtechniquesWithParent": false,
+  "sorting": 0,
+  "hideDisabled": false,
+  "layout": {
+    "layout": "side",
+    "showName": true,
+    "showID": true,
+    "showAggregateScores": true,
+    "aggregateFunction": "average",
+    "countUnscored": false
+  },
+  "metadata": [
+    {
+      "name": "repo",
+      "value": "bfsi-banking-trojan-detections"
+    },
+    {
+      "name": "source",
+      "value": "CYBERXTRON advisories; IOCs enriched via Google Threat Intelligence"
+    },
+    {
+      "name": "generated",
+      "value": "2026-05-25"
+    }
+  ],
+  "name": "BFSI Banking Trojans - Mobile Coverage (TrickMo)",
+  "domain": "mobile-attack",
+  "description": "TrickMo/Coper Android TTPs. All shown as detection gaps (red): endpoint/network rules in this repo cannot see on-device mobile behavior - detection requires Mobile Threat Defense (MTD) / EMM telemetry. APK delivery is partially caught by the enterprise proxy rule (see enterprise layer, T1566).",
+  "techniques": [
+    {
+      "techniqueID": "T1626",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Abuse Elevation Control Mechanism",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1417",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Input Capture (keylogging/overlay)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1409",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Access Stored Application Data",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1430",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Location Tracking",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1429",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Audio Capture",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1513",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Screen Capture",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1616",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Call Control",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1572",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Protocol Tunneling (SSH)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1090",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Proxy (SOCKS5)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1046",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Network Service Scanning",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1422",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "System Network Configuration Discovery",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1521",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Encrypted Channel (TON-based C2)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1437",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Application Layer Protocol",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1407",
+      "color": "#c62828",
+      "score": 25,
+      "comment": "Download New Code at Runtime",
+      "enabled": true,
+      "showSubtechniques": false
+    }
+  ]
+}

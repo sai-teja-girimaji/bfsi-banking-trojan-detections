@@ -87,8 +87,11 @@ bfsi-banking-trojan-detections/
 │   ├── 06_fin_known_hashes.yaral
 │   └── reference_lists/
 │       └── fin_bt_hashes.txt
-└── iocs/
-    └── iocs.csv                    # defanged indicators + GTI verdicts
+├── iocs/
+│   └── iocs.csv                    # defanged indicators + GTI verdicts
+└── attack-navigator/               # MITRE ATT&CK Navigator layer JSONs
+    ├── enterprise-coverage.json
+    └── mobile-coverage.json
 ```
 
 ---
@@ -154,6 +157,18 @@ covered (hunting gap).
 | T1497 | Sandbox Evasion | Defense Evasion | ⬚ |
 | T1055 | Process Injection | Defense Evasion | ⬚ |
 | T1113 | Screen Capture | Collection | ⬚ |
+
+### Interactive ATT&CK Navigator layers
+
+Visualize coverage in the [MITRE ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/)
+— choose **Open Existing Layer → Upload from local** and select a file below.
+
+| Layer | Matrix | Contents |
+|-------|--------|----------|
+| [`attack-navigator/enterprise-coverage.json`](attack-navigator/enterprise-coverage.json) | Enterprise | Banana RAT + TCLBANKER — 7 techniques detected, 1 partial/hunt, 16 documented gaps |
+| [`attack-navigator/mobile-coverage.json`](attack-navigator/mobile-coverage.json) | Mobile | TrickMo / Coper — 14 documented TTPs, all detection gaps (needs MTD/EMM telemetry) |
+
+Color key: 🟩 detected by a repo rule · 🟧 hunt-level heuristic · 🟥 documented TTP, detection gap.
 
 ---
 
