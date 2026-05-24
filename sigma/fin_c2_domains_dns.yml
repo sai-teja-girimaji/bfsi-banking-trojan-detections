@@ -1,0 +1,26 @@
+title: Financial-Sector Banking Trojan C2 Domain Resolution (CYBERXTRON 3-pack)
+id: a0d4f5b6-6c8e-4d9f-b021-3c4d5e6f7081
+status: experimental
+description: DNS resolution of C2 / payload-staging domains from three current
+    financial-sector advisories. All domains GTI-confirmed malicious (17-19
+    engines) and newly registered (Apr 2026).
+references:
+    - CYBERXTRON advisories (2026-05) - SHADOW-WATER-063, TCLBANKER
+author: SOC Detection Engineering
+date: 2026-05-25
+tags:
+    - attack.command_and_control
+    - attack.t1071.001
+logsource:
+    category: dns_query
+    product: windows
+detection:
+    selection:
+        QueryName|endswith:
+            - 'windowsk-cdn.com'    # Banana RAT (DGA-tagged)
+            - 'arquivos-omie.com'   # TCLBANKER
+            - 'doccompartilhe.com'  # TCLBANKER (multi-vendor malicious category)
+    condition: selection
+falsepositives:
+    - None expected; domains are dedicated malicious infrastructure
+level: high

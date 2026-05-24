@@ -1,0 +1,91 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workspaceName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Log Analytics workspace backing Microsoft Sentinel."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+      "apiVersion": "2023-02-01",
+      "name": "[concat(parameters('workspaceName'),'/Microsoft.SecurityInsights/0a1b2c3d-4444-4a2b-8c3d-100000000004')]",
+      "kind": "Scheduled",
+      "properties": {
+        "displayName": "Banking Trojan C2 / Staging Domain Resolution (CYBERXTRON 3-pack)",
+        "description": "DNS resolution of C2/payload-staging domains from three current financial-sector advisories (Banana RAT, TCLBANKER). All domains GTI-confirmed malicious (17-19 engines) and newly registered (Apr 2026). Sub-technique: T1071.001.",
+        "severity": "High",
+        "enabled": true,
+        "query": "DnsEvents\n| where Name has_any (\"windowsk-cdn.com\", \"arquivos-omie.com\", \"doccompartilhe.com\")\n| extend AdvisoryName = \"Banking Trojan C2 Domains (3-pack)\", ThreatActor = \"SHADOW-WATER-063 / TCLBANKER\"\n| project TimeGenerated, ClientIP, Name, IPAddresses, Computer, AdvisoryName, ThreatActor",
+        "queryFrequency": "PT1H",
+        "queryPeriod": "PT1H",
+        "triggerOperator": "GreaterThan",
+        "triggerThreshold": 0,
+        "suppressionDuration": "PT5H",
+        "suppressionEnabled": false,
+        "tactics": [
+          "CommandAndControl"
+        ],
+        "techniques": [
+          "T1071"
+        ],
+        "eventGroupingSettings": {
+          "aggregationKind": "SingleAlert"
+        },
+        "alertDetailsOverride": {
+          "alertDisplayNameFormat": "Banking-trojan C2 domain resolved by {{Computer}}",
+          "alertDescriptionFormat": "DNS resolution of C2/payload-staging domains from three current financial-sector advisories (Banana RAT, TCLBANKER). All domains GTI-confirmed malicious (17-19 engines) and newly registered (Apr 2026). Sub-technique: T1071.001."
+        },
+        "customDetails": {
+          "Advisory": "AdvisoryName",
+          "ThreatActor": "ThreatActor"
+        },
+        "incidentConfiguration": {
+          "createIncident": true,
+          "groupingConfiguration": {
+            "enabled": true,
+            "reopenClosedIncident": false,
+            "lookbackDuration": "PT5H",
+            "matchingMethod": "AllEntities",
+            "groupByEntities": [],
+            "groupByAlertDetails": [],
+            "groupByCustomDetails": []
+          }
+        },
+        "entityMappings": [
+          {
+            "entityType": "Host",
+            "fieldMappings": [
+              {
+                "identifier": "HostName",
+                "columnName": "Computer"
+              }
+            ]
+          },
+          {
+            "entityType": "IP",
+            "fieldMappings": [
+              {
+                "identifier": "Address",
+                "columnName": "ClientIP"
+              }
+            ]
+          },
+          {
+            "entityType": "DNS",
+            "fieldMappings": [
+              {
+                "identifier": "DomainName",
+                "columnName": "Name"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

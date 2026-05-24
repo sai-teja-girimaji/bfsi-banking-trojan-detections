@@ -1,0 +1,32 @@
+title: Sideloaded APK Download Masquerading as TikTok (TrickMo Dropper)
+id: 8b2d5e3f-4a6c-4b7d-9e0f-1a2b3c4d5e6f
+status: experimental
+description: Detects download of an Android package masquerading as TikTok over
+    the corporate proxy, consistent with the TrickMo/Coper banking-trojan dropper
+    (TikTok18.apk). Tune to mobile/BYOD egress paths.
+references:
+    - CYBERXTRON advisory (2026-05-11) - TrickMo Android DTO Malware
+author: SOC Detection Engineering
+date: 2026-05-25
+tags:
+    - attack.initial_access
+    - attack.t1660
+    - attack.t1456
+logsource:
+    category: proxy
+detection:
+    selection_apk:
+        c-uri|endswith: '.apk'
+    selection_lure:
+        c-uri|contains:
+            - 'tiktok'
+            - 'tik_tok'
+            - 'tiktok18'
+    filter_store:
+        cs-host|contains:
+            - 'play.google.com'
+            - 'apkmirror.com'        # adjust to your sanctioned app sources
+    condition: selection_apk and selection_lure and not filter_store
+falsepositives:
+    - Legitimate APK mirrors; restrict to known-good app sources in filter_store
+level: medium

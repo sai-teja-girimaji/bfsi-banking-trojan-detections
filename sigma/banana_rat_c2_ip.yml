@@ -1,0 +1,24 @@
+title: Banana RAT C2 IP Communication (SHADOW-WATER-063)
+id: b1e5a6c7-7d9f-4ea0-c132-4d5e6f708192
+status: experimental
+description: Outbound connection to Banana RAT C2 / payload hosts. IPs are non-CDN
+    (DigitalOcean US, LACNIC/Brazil) so direct IP blocking is effective.
+references:
+    - CYBERXTRON advisory (2026-05-21) - SHADOW-WATER-063 Deploys Banana RAT
+author: SOC Detection Engineering
+date: 2026-05-25
+tags:
+    - attack.command_and_control
+    - attack.t1571
+logsource:
+    category: network_connection
+    product: windows
+detection:
+    selection:
+        DestinationIp:
+            - '24.199.90.58'        # payload host (/payload.php, /st.txt)
+            - '162.141.111.227'     # C2
+    condition: selection
+falsepositives:
+    - None expected
+level: high

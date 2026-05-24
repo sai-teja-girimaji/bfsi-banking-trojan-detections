@@ -1,0 +1,21 @@
+rule banana_rat_powershell_c2_shadow_water_063 {
+  meta:
+    author = "SOC Detection Engineering"
+    description = "Banana RAT C2 payload retrieval via PowerShell (SHADOW-WATER-063), targeting financial institutions"
+    reference = "CYBERXTRON advisory 2026-05-21; IOCs GTI-confirmed malicious"
+    severity = "HIGH"
+    mitre_tactic = "TA0002 (Execution), TA0011 (Command and Control)"
+    mitre_technique = "T1059.001, T1105"
+    advisory = "Banana RAT - SHADOW-WATER-063"
+    priority = "HIGH"
+
+  events:
+    $e.metadata.event_type = "PROCESS_LAUNCH"
+    re.regex($e.target.process.file.full_path, `(?i)\\(powershell|pwsh)\.exe$`)
+    re.regex($e.target.process.command_line,
+             `(?i)(24\.199\.90\.58|162\.141\.111\.227|windowsk-cdn\.com|/payload\.php|/st\.txt)`)
+    $host = $e.principal.hostname
+
+  condition:
+    $e
+}

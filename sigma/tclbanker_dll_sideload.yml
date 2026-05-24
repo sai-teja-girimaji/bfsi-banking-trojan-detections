@@ -1,0 +1,31 @@
+title: TCLBANKER DLL Side-Loading via Spoofed Logitech Plugin
+id: 9c3e6f4a-5b7d-4c8e-af10-2b3c4d5e6f70
+status: experimental
+description: Detects loading of screen_retriever_plugin.dll (abused by TCLBANKER,
+    signed with a forged "Logitech Inc" identity) from an unexpected path or with
+    an invalid signature - indicative of DLL side-loading.
+references:
+    - CYBERXTRON advisory (2026-05-06) - TCLBANKER Brazilian Banking Trojan
+author: SOC Detection Engineering
+date: 2026-05-25
+tags:
+    - attack.defense_evasion
+    - attack.t1574.002
+    - attack.t1036.001
+logsource:
+    category: image_load
+    product: windows
+detection:
+    selection:
+        ImageLoaded|endswith: '\screen_retriever_plugin.dll'
+    filter_legit:
+        ImageLoaded|startswith:
+            - 'C:\Program Files\'
+            - 'C:\Program Files (x86)\'
+        Signed: 'true'
+        SignatureStatus: 'Valid'
+    condition: selection and not filter_legit
+falsepositives:
+    - Legitimate Flutter apps shipping screen_retriever from Program Files with a
+      valid signature (excluded by filter_legit)
+level: high

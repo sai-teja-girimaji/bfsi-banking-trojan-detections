@@ -1,0 +1,19 @@
+rule banana_rat_c2_ip_connection {
+  meta:
+    author = "SOC Detection Engineering"
+    description = "Outbound connection to Banana RAT C2 / payload hosts (SHADOW-WATER-063). Non-CDN IPs - direct IP detection is reliable"
+    reference = "CYBERXTRON advisory 2026-05-21"
+    severity = "HIGH"
+    mitre_tactic = "TA0011 (Command and Control)"
+    mitre_technique = "T1571"
+    advisory = "Banana RAT - SHADOW-WATER-063"
+    priority = "HIGH"
+
+  events:
+    $e.metadata.event_type = "NETWORK_CONNECTION"
+    ($e.target.ip = "24.199.90.58" or $e.target.ip = "162.141.111.227")
+    $host = $e.principal.hostname
+
+  condition:
+    $e
+}

@@ -1,0 +1,93 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workspaceName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Log Analytics workspace backing Microsoft Sentinel."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+      "apiVersion": "2023-02-01",
+      "name": "[concat(parameters('workspaceName'),'/Microsoft.SecurityInsights/0a1b2c3d-1111-4a2b-8c3d-100000000001')]",
+      "kind": "Scheduled",
+      "properties": {
+        "displayName": "Banana RAT - PowerShell C2 Payload Retrieval (SHADOW-WATER-063)",
+        "description": "Detects PowerShell download cradles fetching Banana RAT staging payloads (st.txt / payload.php) from SHADOW-WATER-063 C2 infrastructure targeting financial institutions. Sub-techniques: T1059.001, T1105. Source: CYBERXTRON advisory 2026-05-21; IOCs GTI-confirmed malicious.",
+        "severity": "High",
+        "enabled": true,
+        "query": "DeviceProcessEvents\n| where FileName in~ (\"powershell.exe\", \"pwsh.exe\")\n| where ProcessCommandLine has_any (\"24.199.90.58\", \"162.141.111.227\", \"windowsk-cdn.com\", \"/payload.php\", \"/st.txt\")\n| extend AdvisoryName = \"Banana RAT - SHADOW-WATER-063\", ThreatActor = \"SHADOW-WATER-063\"\n| project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine, AdvisoryName, ThreatActor, ReportId",
+        "queryFrequency": "PT1H",
+        "queryPeriod": "PT1H",
+        "triggerOperator": "GreaterThan",
+        "triggerThreshold": 0,
+        "suppressionDuration": "PT5H",
+        "suppressionEnabled": false,
+        "tactics": [
+          "Execution",
+          "CommandAndControl"
+        ],
+        "techniques": [
+          "T1059",
+          "T1105"
+        ],
+        "eventGroupingSettings": {
+          "aggregationKind": "SingleAlert"
+        },
+        "alertDetailsOverride": {
+          "alertDisplayNameFormat": "Banana RAT PowerShell C2 retrieval on {{DeviceName}}",
+          "alertDescriptionFormat": "Detects PowerShell download cradles fetching Banana RAT staging payloads (st.txt / payload.php) from SHADOW-WATER-063 C2 infrastructure targeting financial institutions. Sub-techniques: T1059.001, T1105. Source: CYBERXTRON advisory 2026-05-21; IOCs GTI-confirmed malicious."
+        },
+        "customDetails": {
+          "Advisory": "AdvisoryName",
+          "ThreatActor": "ThreatActor"
+        },
+        "incidentConfiguration": {
+          "createIncident": true,
+          "groupingConfiguration": {
+            "enabled": true,
+            "reopenClosedIncident": false,
+            "lookbackDuration": "PT5H",
+            "matchingMethod": "AllEntities",
+            "groupByEntities": [],
+            "groupByAlertDetails": [],
+            "groupByCustomDetails": []
+          }
+        },
+        "entityMappings": [
+          {
+            "entityType": "Host",
+            "fieldMappings": [
+              {
+                "identifier": "FullName",
+                "columnName": "DeviceName"
+              }
+            ]
+          },
+          {
+            "entityType": "Account",
+            "fieldMappings": [
+              {
+                "identifier": "Name",
+                "columnName": "AccountName"
+              }
+            ]
+          },
+          {
+            "entityType": "Process",
+            "fieldMappings": [
+              {
+                "identifier": "CommandLine",
+                "columnName": "ProcessCommandLine"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

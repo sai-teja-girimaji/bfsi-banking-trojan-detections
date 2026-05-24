@@ -1,0 +1,94 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workspaceName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Log Analytics workspace backing Microsoft Sentinel."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+      "apiVersion": "2023-02-01",
+      "name": "[concat(parameters('workspaceName'),'/Microsoft.SecurityInsights/0a1b2c3d-6666-4a2b-8c3d-100000000006')]",
+      "kind": "Scheduled",
+      "properties": {
+        "displayName": "Banking Trojan Known File Hashes (CYBERXTRON 3-pack)",
+        "description": "File-hash matches for Banana RAT, TrickMo/Coper, and TCLBANKER samples across file, process and image-load telemetry. All GTI-confirmed malicious. Sub-technique: T1204.002.",
+        "severity": "High",
+        "enabled": true,
+        "query": "let badHashes = dynamic([\n    \"38dfeb772afbd01c04eddda120d283acfb1147a6dc3d54ac62fe23ad06e39d8f\",\n    \"d7545b6dacebdae27effb3c778c5e349027ec789c76ae4f777bd9ba56a70cdaa\",\n    \"01889a9ec2abecb73e5e8792be68a4e3bc7dcbe1c3f19ac06763682d63aa8c21\",\n    \"143c0e12d2aa1bdecde59f273139dd5605d00f61cda7f626224e07390119c026\",\n    \"701d51b7be8b034c860bf97847bd59a87dca8481c4625328813746964995b626\",\n    \"8a174aa70a4396547045aef6c69eb0259bae1706880f4375af71085eeb537059\",\n    \"668f932433a24bbae89d60b24eee4a24808fc741f62c5a3043bb7c9152342f40\",\n    \"63beb7372098c03baab77e0dfc8e5dca5e0a7420f382708a4df79bed2d900394\"\n]);\nunion DeviceFileEvents, DeviceProcessEvents, DeviceImageLoadEvents\n| where SHA256 in (badHashes)\n| extend Algorithm = \"SHA256\", AdvisoryName = \"Banking Trojan Hash IOCs (3-pack)\"\n| project Timestamp, Type, DeviceName, FileName, FolderPath, SHA256, Algorithm, InitiatingProcessFileName, AdvisoryName, ReportId",
+        "queryFrequency": "PT1H",
+        "queryPeriod": "PT1H",
+        "triggerOperator": "GreaterThan",
+        "triggerThreshold": 0,
+        "suppressionDuration": "PT5H",
+        "suppressionEnabled": false,
+        "tactics": [
+          "Execution"
+        ],
+        "techniques": [
+          "T1204"
+        ],
+        "eventGroupingSettings": {
+          "aggregationKind": "SingleAlert"
+        },
+        "alertDetailsOverride": {
+          "alertDisplayNameFormat": "Known banking-trojan hash observed on {{DeviceName}}",
+          "alertDescriptionFormat": "File-hash matches for Banana RAT, TrickMo/Coper, and TCLBANKER samples across file, process and image-load telemetry. All GTI-confirmed malicious. Sub-technique: T1204.002."
+        },
+        "customDetails": {
+          "Advisory": "AdvisoryName"
+        },
+        "incidentConfiguration": {
+          "createIncident": true,
+          "groupingConfiguration": {
+            "enabled": true,
+            "reopenClosedIncident": false,
+            "lookbackDuration": "PT5H",
+            "matchingMethod": "AllEntities",
+            "groupByEntities": [],
+            "groupByAlertDetails": [],
+            "groupByCustomDetails": []
+          }
+        },
+        "entityMappings": [
+          {
+            "entityType": "Host",
+            "fieldMappings": [
+              {
+                "identifier": "FullName",
+                "columnName": "DeviceName"
+              }
+            ]
+          },
+          {
+            "entityType": "File",
+            "fieldMappings": [
+              {
+                "identifier": "Name",
+                "columnName": "FileName"
+              }
+            ]
+          },
+          {
+            "entityType": "FileHash",
+            "fieldMappings": [
+              {
+                "identifier": "Algorithm",
+                "columnName": "Algorithm"
+              },
+              {
+                "identifier": "Value",
+                "columnName": "SHA256"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

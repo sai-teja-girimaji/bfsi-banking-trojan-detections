@@ -1,0 +1,34 @@
+title: Financial-Sector Banking Trojan Known Hashes (CYBERXTRON 3-pack)
+id: c2f6b7d8-8ea0-4fb1-d243-5e6f70819203
+status: experimental
+description: File hashes for Banana RAT, TrickMo/Coper, and TCLBANKER samples,
+    GTI-confirmed malicious. Works on any log source populating the Hashes field
+    (Sysmon EID 1/11, EDR file events).
+references:
+    - CYBERXTRON advisories (2026-04 to 2026-05)
+author: SOC Detection Engineering
+date: 2026-05-25
+tags:
+    - attack.execution
+    - attack.t1204.002
+logsource:
+    category: file_event
+    product: windows
+detection:
+    selection:
+        Hashes|contains:
+            # Banana RAT (SHADOW-WATER-063)
+            - 'SHA256=38dfeb772afbd01c04eddda120d283acfb1147a6dc3d54ac62fe23ad06e39d8f'
+            - 'SHA256=d7545b6dacebdae27effb3c778c5e349027ec789c76ae4f777bd9ba56a70cdaa'
+            # TrickMo / Coper (Android APKs)
+            - 'SHA256=01889a9ec2abecb73e5e8792be68a4e3bc7dcbe1c3f19ac06763682d63aa8c21'
+            - 'SHA256=143c0e12d2aa1bdecde59f273139dd5605d00f61cda7f626224e07390119c026'
+            # TCLBANKER
+            - 'SHA256=701d51b7be8b034c860bf97847bd59a87dca8481c4625328813746964995b626'
+            - 'SHA256=8a174aa70a4396547045aef6c69eb0259bae1706880f4375af71085eeb537059'
+            - 'SHA256=668f932433a24bbae89d60b24eee4a24808fc741f62c5a3043bb7c9152342f40'
+            - 'SHA256=63beb7372098c03baab77e0dfc8e5dca5e0a7420f382708a4df79bed2d900394'
+    condition: selection
+falsepositives:
+    - None
+level: high

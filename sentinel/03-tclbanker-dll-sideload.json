@@ -1,0 +1,97 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workspaceName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Log Analytics workspace backing Microsoft Sentinel."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+      "apiVersion": "2023-02-01",
+      "name": "[concat(parameters('workspaceName'),'/Microsoft.SecurityInsights/0a1b2c3d-3333-4a2b-8c3d-100000000003')]",
+      "kind": "Scheduled",
+      "properties": {
+        "displayName": "TCLBANKER - DLL Side-Loading via Spoofed Logitech Plugin",
+        "description": "Detects loading of screen_retriever_plugin.dll (abused by TCLBANKER, signed with a forged 'Logitech Inc' identity) from an unexpected path or with an untrusted signature - indicative of DLL side-loading. Sub-techniques: T1574.002, T1036.001. Source: CYBERXTRON 2026-05-06.",
+        "severity": "High",
+        "enabled": true,
+        "query": "DeviceImageLoadEvents\n| where FileName =~ \"screen_retriever_plugin.dll\"\n| where not(FolderPath startswith \"C:\\\\Program Files\\\\\" or FolderPath startswith \"C:\\\\Program Files (x86)\\\\\")\n| join kind=leftouter (DeviceFileCertificateInfo | project SHA256, IsSigned, IsTrusted, Signer) on SHA256\n| where IsTrusted != true or isempty(IsTrusted)\n| extend Algorithm = \"SHA256\", AdvisoryName = \"TCLBANKER Banking Trojan\", ThreatActor = \"TCLBANKER operators\"\n| project Timestamp, DeviceName, InitiatingProcessFileName, FolderPath, FileName, SHA256, Algorithm, Signer, IsTrusted, AdvisoryName, ThreatActor, ReportId",
+        "queryFrequency": "PT1H",
+        "queryPeriod": "PT1H",
+        "triggerOperator": "GreaterThan",
+        "triggerThreshold": 0,
+        "suppressionDuration": "PT5H",
+        "suppressionEnabled": false,
+        "tactics": [
+          "DefenseEvasion",
+          "Persistence"
+        ],
+        "techniques": [
+          "T1574",
+          "T1036"
+        ],
+        "eventGroupingSettings": {
+          "aggregationKind": "SingleAlert"
+        },
+        "alertDetailsOverride": {
+          "alertDisplayNameFormat": "TCLBANKER DLL side-load on {{DeviceName}}",
+          "alertDescriptionFormat": "Detects loading of screen_retriever_plugin.dll (abused by TCLBANKER, signed with a forged 'Logitech Inc' identity) from an unexpected path or with an untrusted signature - indicative of DLL side-loading. Sub-techniques: T1574.002, T1036.001. Source: CYBERXTRON 2026-05-06."
+        },
+        "customDetails": {
+          "Advisory": "AdvisoryName",
+          "ThreatActor": "ThreatActor"
+        },
+        "incidentConfiguration": {
+          "createIncident": true,
+          "groupingConfiguration": {
+            "enabled": true,
+            "reopenClosedIncident": false,
+            "lookbackDuration": "PT5H",
+            "matchingMethod": "AllEntities",
+            "groupByEntities": [],
+            "groupByAlertDetails": [],
+            "groupByCustomDetails": []
+          }
+        },
+        "entityMappings": [
+          {
+            "entityType": "Host",
+            "fieldMappings": [
+              {
+                "identifier": "FullName",
+                "columnName": "DeviceName"
+              }
+            ]
+          },
+          {
+            "entityType": "File",
+            "fieldMappings": [
+              {
+                "identifier": "Name",
+                "columnName": "FileName"
+              }
+            ]
+          },
+          {
+            "entityType": "FileHash",
+            "fieldMappings": [
+              {
+                "identifier": "Algorithm",
+                "columnName": "Algorithm"
+              },
+              {
+                "identifier": "Value",
+                "columnName": "SHA256"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

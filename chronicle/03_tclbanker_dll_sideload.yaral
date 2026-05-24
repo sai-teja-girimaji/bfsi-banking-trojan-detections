@@ -1,0 +1,21 @@
+rule tclbanker_dll_sideload_spoofed_logitech {
+  meta:
+    author = "SOC Detection Engineering"
+    description = "TCLBANKER DLL side-loading via screen_retriever_plugin.dll forged as 'Logitech Inc', loaded from a non-standard path"
+    reference = "CYBERXTRON advisory 2026-05-06"
+    severity = "HIGH"
+    mitre_tactic = "TA0005 (Defense Evasion), TA0003 (Persistence)"
+    mitre_technique = "T1574.002, T1036.001"
+    advisory = "TCLBANKER Banking Trojan"
+    priority = "HIGH"
+
+  events:
+    // Sysmon EID7 / EDR module load. Confirm your parser populates target.file
+    // (and event_type) for image-load events; some parsers emit STATUS_UPDATE.
+    re.regex($e.target.file.full_path, `(?i)\\screen_retriever_plugin\.dll$`)
+    not re.regex($e.target.file.full_path, `(?i)^C:\\Program Files( \(x86\))?\\`)
+    $host = $e.principal.hostname
+
+  condition:
+    $e
+}

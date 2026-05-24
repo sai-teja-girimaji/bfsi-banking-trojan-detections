@@ -1,0 +1,91 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workspaceName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Log Analytics workspace backing Microsoft Sentinel."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+      "apiVersion": "2023-02-01",
+      "name": "[concat(parameters('workspaceName'),'/Microsoft.SecurityInsights/0a1b2c3d-2222-4a2b-8c3d-100000000002')]",
+      "kind": "Scheduled",
+      "properties": {
+        "displayName": "TrickMo - Sideloaded APK Masquerading as TikTok",
+        "description": "Detects download of an Android package masquerading as TikTok over the corporate proxy, consistent with the TrickMo/Coper banking-trojan dropper (TikTok18.apk). Enterprise mapping T1566 (Phishing); mobile ATT&CK equivalents T1660 (Phishing) / T1456 (Drive-by Compromise). Tune app-store allowlist. Source: CYBERXTRON 2026-05-11.",
+        "severity": "Medium",
+        "enabled": true,
+        "query": "CommonSecurityLog\n| where RequestURL endswith \".apk\"\n| where RequestURL has_any (\"tiktok\", \"tik_tok\", \"tiktok18\")\n| where DestinationHostName !has \"play.google.com\"\n| extend AdvisoryName = \"TrickMo Android DTO Malware\", ThreatActor = \"TrickMo/Coper\"\n| project TimeGenerated, SourceIP, SourceUserName, DestinationHostName, RequestURL, DeviceAction, DeviceVendor, AdvisoryName, ThreatActor",
+        "queryFrequency": "PT1H",
+        "queryPeriod": "PT1H",
+        "triggerOperator": "GreaterThan",
+        "triggerThreshold": 0,
+        "suppressionDuration": "PT5H",
+        "suppressionEnabled": false,
+        "tactics": [
+          "InitialAccess"
+        ],
+        "techniques": [
+          "T1566"
+        ],
+        "eventGroupingSettings": {
+          "aggregationKind": "SingleAlert"
+        },
+        "alertDetailsOverride": {
+          "alertDisplayNameFormat": "Suspicious TikTok-themed APK download from {{SourceIP}}",
+          "alertDescriptionFormat": "Detects download of an Android package masquerading as TikTok over the corporate proxy, consistent with the TrickMo/Coper banking-trojan dropper (TikTok18.apk). Enterprise mapping T1566 (Phishing); mobile ATT&CK equivalents T1660 (Phishing) / T1456 (Drive-by Compromise). Tune app-store allowlist. Source: CYBERXTRON 2026-05-11."
+        },
+        "customDetails": {
+          "Advisory": "AdvisoryName",
+          "ThreatActor": "ThreatActor"
+        },
+        "incidentConfiguration": {
+          "createIncident": true,
+          "groupingConfiguration": {
+            "enabled": true,
+            "reopenClosedIncident": false,
+            "lookbackDuration": "PT5H",
+            "matchingMethod": "AllEntities",
+            "groupByEntities": [],
+            "groupByAlertDetails": [],
+            "groupByCustomDetails": []
+          }
+        },
+        "entityMappings": [
+          {
+            "entityType": "IP",
+            "fieldMappings": [
+              {
+                "identifier": "Address",
+                "columnName": "SourceIP"
+              }
+            ]
+          },
+          {
+            "entityType": "URL",
+            "fieldMappings": [
+              {
+                "identifier": "Url",
+                "columnName": "RequestURL"
+              }
+            ]
+          },
+          {
+            "entityType": "Account",
+            "fieldMappings": [
+              {
+                "identifier": "Name",
+                "columnName": "SourceUserName"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

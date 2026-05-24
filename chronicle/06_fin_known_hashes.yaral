@@ -1,0 +1,22 @@
+rule fin_bankingtrojan_known_hashes {
+  meta:
+    author = "SOC Detection Engineering"
+    description = "Known Banana RAT / TrickMo / TCLBANKER sample SHA256 hashes (CYBERXTRON 3-pack). All GTI-confirmed malicious"
+    reference = "CYBERXTRON advisories 2026-04..05"
+    severity = "HIGH"
+    mitre_tactic = "TA0002 (Execution)"
+    mitre_technique = "T1204.002"
+    advisory = "Banking Trojan Hash IOCs (3-pack)"
+    priority = "HIGH"
+
+  events:
+    // Requires a STRING reference list named fin_bt_hashes
+    // (see reference_lists/fin_bt_hashes.txt)
+    ($e.target.file.sha256 in %fin_bt_hashes
+     or $e.target.process.file.sha256 in %fin_bt_hashes
+     or $e.principal.process.file.sha256 in %fin_bt_hashes)
+    $host = $e.principal.hostname
+
+  condition:
+    $e
+}

@@ -1,0 +1,20 @@
+rule fin_bankingtrojan_c2_domains_dns {
+  meta:
+    author = "SOC Detection Engineering"
+    description = "Banking-trojan C2 / staging domain resolution (CYBERXTRON 3-pack: Banana RAT, TCLBANKER). Domains GTI-confirmed malicious, NRD Apr 2026"
+    reference = "CYBERXTRON advisories 2026-05"
+    severity = "HIGH"
+    mitre_tactic = "TA0011 (Command and Control)"
+    mitre_technique = "T1071.001"
+    advisory = "Banking Trojan C2 Domains (3-pack)"
+    priority = "HIGH"
+
+  events:
+    $e.metadata.event_type = "NETWORK_DNS"
+    re.regex($e.network.dns.questions.name,
+             `(?i)(^|\.)(windowsk-cdn|arquivos-omie|doccompartilhe)\.com$`)
+    $host = $e.principal.hostname
+
+  condition:
+    $e
+}

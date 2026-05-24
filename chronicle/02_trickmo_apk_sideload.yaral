@@ -1,0 +1,21 @@
+rule trickmo_sideloaded_apk_tiktok_lure {
+  meta:
+    author = "SOC Detection Engineering"
+    description = "Sideloaded APK masquerading as TikTok over web proxy (TrickMo/Coper banking-trojan dropper)"
+    reference = "CYBERXTRON advisory 2026-05-11"
+    severity = "MEDIUM"
+    mitre_tactic = "TA0001 (Initial Access)"
+    mitre_technique = "T1566; mobile T1660, T1456"
+    advisory = "TrickMo Android DTO Malware"
+    priority = "MEDIUM"
+
+  events:
+    $e.metadata.event_type = "NETWORK_HTTP"
+    re.regex($e.target.url, `(?i)\.apk($|\?)`)
+    re.regex($e.target.url, `(?i)tik[_]?tok`)
+    not re.regex($e.target.url, `(?i)play\.google\.com`)
+    $src = $e.principal.ip
+
+  condition:
+    $e
+}
