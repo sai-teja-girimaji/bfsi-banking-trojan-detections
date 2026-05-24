@@ -246,6 +246,9 @@ Issues and PRs welcome — especially additional log-source variants (Splunk, El
 new IOCs for these families, and false-positive reports with context. Please keep IOCs
 defanged in issues and include the telemetry/log source for any FP report.
 
+See **[CONTRIBUTING.md](CONTRIBUTING.md)** for rule submission guidelines, per-platform
+requirements, IOC enrichment expectations, local validation steps, and the PR checklist.
+
 ## Disclaimer
 
 Provided for **defensive security and detection engineering**. Rules are starting points:
