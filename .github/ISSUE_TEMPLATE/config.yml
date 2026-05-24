@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Contribution guidelines
+    url: https://github.com/sai-teja-girimaji/bfsi-banking-trojan-detections/blob/main/CONTRIBUTING.md
+    about: Read the rule submission guidelines before opening a detection PR.

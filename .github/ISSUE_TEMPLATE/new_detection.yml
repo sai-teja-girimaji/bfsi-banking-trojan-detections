@@ -1,0 +1,88 @@
+name: New detection / coverage request
+description: Propose or submit a new detection rule, or request coverage for a gap.
+title: "[detection]: "
+labels: ["detection", "enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing detection coverage! Please **defang all IOCs**
+        (`evil[.]com`, `hxxp://`) and review
+        [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md) first.
+  - type: dropdown
+    id: family
+    attributes:
+      label: Threat family
+      options:
+        - Banana RAT / SHADOW-WATER-063
+        - TrickMo / Coper
+        - TCLBANKER
+        - Other / new family (describe below)
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Behavior / TTP being detected
+      description: What attacker activity does this catch, and why is it a good detection point?
+      placeholder: e.g. PowerShell download cradle retrieving a staging payload from C2.
+    validations:
+      required: true
+  - type: input
+    id: mitre
+    attributes:
+      label: MITRE ATT&CK technique IDs
+      placeholder: e.g. T1059.001, T1105
+    validations:
+      required: true
+  - type: checkboxes
+    id: platforms
+    attributes:
+      label: Target platforms
+      options:
+        - label: Sigma (source rule)
+        - label: Microsoft Sentinel (ARM/KQL)
+        - label: Google SecOps / Chronicle (YARA-L)
+  - type: textarea
+    id: logic
+    attributes:
+      label: Proposed detection logic / draft rule
+      description: Paste a draft (Sigma preferred) or pseudo-logic. Author Sigma first.
+      render: yaml
+    validations:
+      required: true
+  - type: textarea
+    id: iocs
+    attributes:
+      label: Associated IOCs (defanged)
+      description: One per line. Include GTI/VT verdict if known.
+      placeholder: |
+        evil-c2[.]com  (VT 18/90)
+        185[.]10[.]10[.]10
+    validations:
+      required: false
+  - type: textarea
+    id: references
+    attributes:
+      label: References / source
+      description: Advisory, report, or analysis this is based on.
+    validations:
+      required: true
+  - type: textarea
+    id: falsepositives
+    attributes:
+      label: False positives considered
+      description: Known benign triggers and suggested tuning.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission checklist
+      options:
+        - label: All IOCs are defanged
+          required: true
+        - label: A fresh, unique UUID will be used for any new Sigma rule
+          required: true
+        - label: I will run the validator scripts before opening a PR
+          required: false

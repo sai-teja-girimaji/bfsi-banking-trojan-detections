@@ -1,0 +1,48 @@
+name: Bug / tooling issue
+description: Report a problem with CI, a validator script, or a rule/template error.
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - CI workflow (.github/workflows)
+        - Validator script (scripts/)
+        - Sigma rule (sigma/)
+        - Sentinel template (sentinel/)
+        - Chronicle rule (chronicle/)
+        - Docs (README/CONTRIBUTING)
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What's wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run `python scripts/validate_sigma.py sigma/`
+        2. ...
+    validations:
+      required: false
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: e.g. Python 3.12, macOS; or GitHub Actions runner
+    validations:
+      required: false

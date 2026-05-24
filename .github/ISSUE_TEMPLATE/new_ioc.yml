@@ -1,0 +1,85 @@
+name: New IOC submission
+description: Submit new indicators for an in-scope banking-trojan family.
+title: "[ioc]: "
+labels: ["ioc"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Defang all indicators.** Enrich with a Google Threat Intelligence /
+        VirusTotal verdict before submitting. If you did not independently verify
+        an indicator, mark it `advisory-sourced` — don't overstate.
+  - type: dropdown
+    id: family
+    attributes:
+      label: Threat family
+      options:
+        - Banana RAT / SHADOW-WATER-063
+        - TrickMo / Coper
+        - TCLBANKER
+        - Other (describe)
+    validations:
+      required: true
+  - type: textarea
+    id: indicators
+    attributes:
+      label: Indicators (defanged, one per line)
+      placeholder: |
+        evil-c2[.]com
+        185[.]10[.]10[.]10
+        3a7f...e91c  (sha256)
+    validations:
+      required: true
+  - type: dropdown
+    id: ioctype
+    attributes:
+      label: Predominant IOC type
+      options:
+        - domain
+        - ipv4
+        - sha256
+        - url
+        - mixed
+    validations:
+      required: true
+  - type: dropdown
+    id: role
+    attributes:
+      label: Role
+      options:
+        - C2
+        - staging / payload host
+        - loader / payload (file)
+        - distribution
+        - other / unknown
+    validations:
+      required: true
+  - type: input
+    id: verdict
+    attributes:
+      label: GTI / VirusTotal verdict
+      placeholder: e.g. 19/90 malicious  (or "advisory-sourced, not re-verified")
+    validations:
+      required: true
+  - type: input
+    id: infra
+    attributes:
+      label: Infrastructure
+      placeholder: e.g. AS14061 DigitalOcean; NRD 2026-04-19; Cloudflare-fronted
+    validations:
+      required: false
+  - type: input
+    id: source
+    attributes:
+      label: Source / reference
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: All indicators are defanged
+          required: true
+        - label: Verdict reflects actual GTI/VT data (or is marked advisory-sourced)
+          required: true

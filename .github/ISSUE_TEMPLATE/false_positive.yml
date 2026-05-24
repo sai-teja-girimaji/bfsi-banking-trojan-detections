@@ -1,0 +1,64 @@
+name: False positive report
+description: Report a rule firing on benign activity.
+title: "[fp]: "
+labels: ["false-positive"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us tune. **Sanitize and defang** any data you paste below.
+  - type: input
+    id: rule
+    attributes:
+      label: Rule name
+      description: Which rule fired? (file name or rule title)
+      placeholder: e.g. tclbanker_dll_sideload
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Sigma
+        - Microsoft Sentinel
+        - Google SecOps / Chronicle
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: logsource
+    attributes:
+      label: Log source / telemetry
+      placeholder: e.g. DeviceImageLoadEvents (MDE), Sysmon EID 7
+    validations:
+      required: true
+  - type: textarea
+    id: event
+    attributes:
+      label: Sanitized event that fired
+      description: Redact hostnames, users, internal IPs. Keep the fields that matter.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is this benign?
+      description: What legitimate process/software caused it?
+    validations:
+      required: true
+  - type: textarea
+    id: tuning
+    attributes:
+      label: Suggested tuning
+      description: Filter/exclusion you'd propose (optional).
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: Sample is sanitized and IOCs/identifiers are defanged
+          required: true
