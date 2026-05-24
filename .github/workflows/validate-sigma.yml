@@ -1,4 +1,4 @@
-name: Validate Sigma
+name: Validate Detections
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
 
 jobs:
   validate:
+    name: Sigma
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,3 +27,21 @@ jobs:
       - name: sigma check (official toolchain, advisory)
         continue-on-error: true
         run: sigma check sigma/
+
+  validate-platform-rules:
+    name: Sentinel & Chronicle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Validate Sentinel ARM templates
+        run: python scripts/validate_sentinel.py sentinel/
+
+      - name: Validate Chronicle YARA-L rules
+        run: python scripts/validate_chronicle.py chronicle/
