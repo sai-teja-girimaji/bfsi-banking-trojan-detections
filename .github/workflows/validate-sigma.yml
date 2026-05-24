@@ -1,0 +1,28 @@
+name: Validate Sigma
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install --quiet pyyaml sigma-cli
+
+      - name: Deep-validate Sigma rules (gating)
+        run: python scripts/validate_sigma.py sigma/
+
+      - name: sigma check (official toolchain, advisory)
+        continue-on-error: true
+        run: sigma check sigma/

@@ -4,6 +4,7 @@
 > (Banking, Financial Services & Insurance) sector — shipped as Sigma source plus
 > compiled **Microsoft Sentinel** and **Google SecOps (Chronicle)** rules.
 
+[![Validate Sigma](https://github.com/sai-teja-girimaji/bfsi-banking-trojan-detections/actions/workflows/validate-sigma.yml/badge.svg)](https://github.com/sai-teja-girimaji/bfsi-banking-trojan-detections/actions/workflows/validate-sigma.yml)
 ![Rules](https://img.shields.io/badge/detection_rules-6-blue)
 ![Platforms](https://img.shields.io/badge/platforms-Sigma%20%7C%20Sentinel%20%7C%20Chronicle-success)
 ![ATT&CK](https://img.shields.io/badge/MITRE%20ATT%26CK-mapped-red)
